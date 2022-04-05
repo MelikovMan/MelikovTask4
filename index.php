@@ -19,31 +19,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 
 	  if ($errors['name']) {
 		setcookie('name_error', '', 100000);
-		$messages[] = '<div class="error">Name must contain at least 1 letter, can only have letters, spacing and -</div>';
+		$messages['bad_name'] = '<span class="error-text">Name must contain at least 1 letter, can only have letters, spacing and -</span>';
 	  }
 	  if ($errors['email']) {
 		setcookie('email_error', '', 100000);
-		$messages[] = '<div class="error">Email can only contain letters, dots, dashes, @ sign, and email domain can have 2-4 letters.</div>';
+		$messages['bad_email'] = '<span class="error-text">Email can only contain letters, dots, dashes, @ sign, and email domain can have 2-4 letters.</span>';
 	  }
 	  if ($errors['birth_date']) {
 		setcookie('birth_error', '', 100000);
-		$messages[] = '<div class="error">Must be filled.</div>';
+		$messages['bad_date'] = '<span class="error-text">Must be filled.</span>';
 	  }
 	  if ($errors['sex']) {
 		setcookie('sex_error', '', 100000);
-		$messages[] = '<div class="error">Invalid choice.</div>';
+		$messages['bad_sex'] = '<span class="error-text">Invalid choice.</span>';
 	  }
 	  if ($errors['limbs']) {
 		setcookie('limb_error', '', 100000);
-		$messages[] = '<div class="error">Invalid choice.</div>';
+		$messages['bad_limbs'] = '<span class="error-text">Invalid choice.</span>';
 	  }
 	  if ($errors['super']) {
 		setcookie('super_error', '', 100000);
-		$messages[] = '<div class="error">Must pick at least 1.</div>';
+		$messages['bad_super'] = '<span class="error-text">Must pick at least 1.</span>';
 	  }
 	  if ($errors['bio']) {
 		setcookie('bio_error', '', 100000);
-		$messages[] = '<div class="error">Bio must contain at least 1 letter, can only have letters, spacing and -</div>';
+		$messages['bad_bio'] = '<span class="error-text">Bio must contain at least 1 letter, can only have letters, spacing and -</span>';
 	  }
 
 	
@@ -138,6 +138,13 @@ if(empty($_POST['bio-field']) || !preg_match($regex,$_POST['bio-field'])){
 else {
 	setcookie('bio-value', $_POST['bio-field'], time() + 30 * 24 * 60 * 60);
 }
+if(empty($_POST['checkbox']) && $_POST['checkbox']!='realslim'){
+	setcookie('check-error', '1', time() + 24 * 60 * 60);
+    $errors = TRUE;
+}
+else {
+	setcookie('check-value', $_POST['checkbox'], time() + 30 * 24 * 60 * 60);
+}
 if ($errors) {
     header('Location: index.php');
     exit();
@@ -192,5 +199,7 @@ catch(PDOException $e){
 }
 
 print_r("Succesfully added new stuff, probably...");
+setcookie('save', '1');
+header('Location: index.php');
 }
 ?>
