@@ -23,26 +23,26 @@
 			<input name="field-date" 
 			  type="date" <?php if($errors['birth_date']) print('class="error"');?> value="<?php print($values['birth_date'])?>" /> <?php if($errors['birth_date']) print($messages['bad_date']) ?> 
 		  </label><br />
-	Sex: <label><input type="radio" <?php if($values['sex'] === 'male') print(checked="checked");?>
+	Sex: <label><input type="radio" <?php if($values['sex'] === 'male') print('checked="checked"');?>
 			name="radio-group-1" value = "male" />
 			Male </label>
-		  <label><input type="radio" <?php if($values['sex'] === 'male') print(checked="checked");?>
+		  <label><input type="radio" <?php if($values['sex'] === 'female') print('checked="checked"');?>
 			name="radio-group-1" value = "female" />
-			Female </label><br />
-			<?php if($errors['sex']) print($messages['bad_sex']) ?>
-	Amoflimbs: <br/> <label><input type="radio" <?php if($values['limbs'] === 1) print(checked="checked");?>
+			Female </label> <?php if($errors['sex']) print($messages['bad_sex']) ?><br />
+
+	Amoflimbs: <br/> <label><input type="radio" <?php if($values['limbs'] === 1) print('checked="checked"');?>
 			name="radio-group-2" value = "1" />
 			1 </label><br/>
-		  <label><input type="radio" <?php if($values['limbs'] === 2) print(checked="checked");?>
+		  <label><input type="radio" <?php if($values['limbs'] === 2) print('checked="checked"');?>
 			name="radio-group-2" value = "2" />
 			2 </label><br />
-			<label><input type="radio" <?php if($values['limbs'] === 3) print(checked="checked");?>
+			<label><input type="radio" <?php if($values['limbs'] === 3) print('checked="checked"');?>
 			name="radio-group-2" value = "3" />
 			3 </label><br />
-			<label><input type="radio" <?php if($values['limbs'] === 4) print(checked="checked");?>
+			<label><input type="radio" <?php if($values['limbs'] === 4) print('checked="checked"');?>
 			name="radio-group-2" value = "4" />
 			4 </label><br />
-			<label><input type="radio" <?php if($values['limbs'] === 5) print(checked="checked");?>
+			<label><input type="radio" <?php if($values['limbs'] === 5) print('checked="checked"');?>
 			name="radio-group-2" value = "5" />
 			5 </label><br />
 			<?php if($errors['limbs']) print($messages['bad_limbs']) ?>
@@ -51,21 +51,25 @@
 			<br/>
 			<select name="field-name-4[]" <?php if($errors['super']) print('class="error"');?>
 			  multiple="multiple">
-			  <option value="immortality" <?php if(array_search('immortality',$values['super'])!==false) print('selected');?>>Immortality</option>
-			  <option value="walkthroughwalls" <?php if(array_search('walkthroughwalls',$values['super'])!==false) print('selected');?>>Walk through walls</option>
-			  <option value="levitation" <?php if(array_search('levitation',$values['super'])!==false) print('selected');?>>levitation</option>
+			  <option value="immortality" <?php if(array_search('immortality',array($values['super']))!==false) print('selected');?>>Immortality</option>
+			  <option value="walkthroughwalls" <?php if(array_search('walkthroughwalls',array($values['super']))!==false) print('selected');?>>Walk through walls</option>
+			  <option value="levitation" <?php if(array_search('levitation',array($values['super']))!==false) print('selected');?>>levitation</option>
 			</select>
 			<?php if($errors['super']) print($messages['bad_super']) ?>
 		  </label><br />
 	<label>
 	Biography: <br/>
-	  <textarea name = "bio-field" <?php if($errors['super']) print('class="error"');?>> <?php print($values['bio']);?> </textarea>
-	  <?php if($errors['bio']) print($messages['bad_bio']) ?>
+	  <textarea name = "bio-field" <?php if($errors['bio']) print('class="error"');?>> <?php echo($values['bio']);?> </textarea>
 	</label> <br/>
+	<?php if($errors['bio']) print($messages['bad_bio'])?>
 	<label>
-	  <input type = "checkbox" name = "checkbox" value="realslim"> I agree with the contract </label> <br/>
+	  <input type = "checkbox" name = "checkbox" value="realslim"> I agree with the contract </label>
+	   <br/>
+	   <?php if($errors['check']) print($messages['bad_check'])?>
 	  Send: <br/>
 	  <input type="submit" value="Sending" />
+	  <br/>
+	  <?php print($messages['saved'])?>
   </form>
 </div>
 </div>

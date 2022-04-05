@@ -3,6 +3,7 @@ header('Content-Type: text/html; charset=UTF-8');
 if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 	  // Массив для временного хранения сообщений пользователю.
 	  $messages = array();
+	  $messages['saved']='';
 	  if (!empty($_COOKIE['save'])) {
 		setcookie('save', '', 100000);
 		$messages['saved'] = 'Спасибо, результаты сохранены.';
@@ -16,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 	  $errors['limbs'] = !empty($_COOKIE['limb_error']);
 	  $errors['super'] = !empty($_COOKIE['super_error']);
 	  $errors['bio'] = !empty($_COOKIE['bio_error']);
+	  $errors['check'] = !empty($_COOKIE['check_error']);
 
 	  if ($errors['name']) {
 		setcookie('name_error', '', 100000);
@@ -45,14 +47,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 		setcookie('bio_error', '', 100000);
 		$messages['bad_bio'] = '<span class="error-text">Bio must contain at least 1 letter, can only have letters, spacing and -</span>';
 	  }
-
+	  if ($errors['check']) {
+		setcookie('check_error', '', 100000);
+		$messages['bad_check'] = '<span class="error-text">Must be signed!</span>';
+	  }
 	
 	  $values = array();
 	  $values['name'] = empty($_COOKIE['name_value']) ? '' : $_COOKIE['name_value'];
 	  $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
 	  $values['birth_date'] = empty($_COOKIE['birth_value']) ? '' : $_COOKIE['birth_value'];
 	  $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
-	  $values['limbs'] = empty($_COOKIE['limb_value']) ? '' : $_COOKIE['limb_value'];
+	  $values['limbs'] = empty($_COOKIE['limb_value']) ? '' : intval($_COOKIE['limb_value']);
 	  $values['super'] = empty($_COOKIE['super_value']) ? '' : $_COOKIE['super_value'];
 	  $values['bio'] = empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'];
 
@@ -61,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 else {
 $errors = FALSE;
 $regex = "/^\s*\w+[\w\s-]*$/";
+$bioregex = "/^\s*\w+[\w\s\.,!\?-]*$/";
 $dateregex = "/^\d{4}-\d{2}-\d{2}$/";
 $mailregex = "/^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$/";
 $super_list = array('immortality','walkthroughwalls','levitation');
@@ -83,10 +89,10 @@ else {
 
 $date_correct = !empty($_POST['field-date']);
 if($date_correct){
-	$date_correct=preg_match($mailregex,$_POST['field-date']))
+	$date_correct=preg_match($dateregex,$_POST['field-date']);
 	if($date_correct){
-		preg_match_all("/\d+/",$birth,$matches);
-		$date_correct=checkdate($matches[0][1],$matches[0][2],$matches[0][0]))
+		preg_match_all("/\d+/",$_POST['field-date'],$matches);
+		$date_correct=checkdate($matches[0][1],$matches[0][2],$matches[0][0]);
 	}
 }
 
@@ -98,7 +104,7 @@ else {
 	setcookie('birth_value', $_POST['field-date'], time() + 30 * 24 * 60 * 60);
 }
 
-if (empty($_POST['radio-group-1']) || $_POST['radio-group-1']!=='male' || $_POST['radio-group-1']!=='female'){
+if (empty($_POST['radio-group-1']) || ($_POST['radio-group-1']!=='male' && $_POST['radio-group-1']!=='female')){
     setcookie('sex_error', '1', time() + 24 * 60 * 60);
     $errors = TRUE;
 }
@@ -106,7 +112,7 @@ else {
 	setcookie('sex_value', $_POST['radio-group-1'], time() + 30 * 24 * 60 * 60);
 }
 
-if (!is_numeric($_POST['radio-group-2']) || intval($_POST['radio-group-2'])) < 1 || intval($_POST['radio-group-2'])) > 5){
+if ((!is_numeric($_POST['radio-group-2'])) || (intval($_POST['radio-group-2']) < 1) || (intval($_POST['radio-group-2']) > 5)){
     setcookie('limb_error', '1', time() + 24 * 60 * 60);
     $errors = TRUE;
 }
@@ -131,19 +137,19 @@ else {
 	setcookie('super_value', $_POST['field-name-4'], time() + 30 * 24 * 60 * 60);
 }
 
-if(empty($_POST['bio-field']) || !preg_match($regex,$_POST['bio-field'])){
-    setcookie('bio-error', '1', time() + 24 * 60 * 60);
+if(empty($_POST['bio-field']) || !preg_match($bioregex,$_POST['bio-field'])){
+    setcookie('bio_error', '1', time() + 24 * 60 * 60);
     $errors = TRUE;
 }
 else {
-	setcookie('bio-value', $_POST['bio-field'], time() + 30 * 24 * 60 * 60);
+	setcookie('bio_value', $_POST['bio-field'], time() + 30 * 24 * 60 * 60);
 }
 if(empty($_POST['checkbox']) && $_POST['checkbox']!='realslim'){
-	setcookie('check-error', '1', time() + 24 * 60 * 60);
+	setcookie('check_error', '1', time() + 24 * 60 * 60);
     $errors = TRUE;
 }
 else {
-	setcookie('check-value', $_POST['checkbox'], time() + 30 * 24 * 60 * 60);
+	setcookie('check_value', $_POST['checkbox'], time() + 30 * 24 * 60 * 60);
 }
 if ($errors) {
     header('Location: index.php');
