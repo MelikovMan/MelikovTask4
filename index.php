@@ -58,9 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET'){
 	  $values['birth_date'] = empty($_COOKIE['birth_value']) ? '' : $_COOKIE['birth_value'];
 	  $values['sex'] = empty($_COOKIE['sex_value']) ? '' : $_COOKIE['sex_value'];
 	  $values['limbs'] = empty($_COOKIE['limb_value']) ? '' : intval($_COOKIE['limb_value']);
-	  $values['super'] = empty($_COOKIE['super_value']) ? '' : $_COOKIE['super_value'];
+	  $values['super'] = empty($_COOKIE['super_value']) ? '' : json_decode($_COOKIE['super_value']);
 	  $values['bio'] = empty($_COOKIE['bio_value']) ? '' : $_COOKIE['bio_value'];
-
 	  include('form.php');
 }
 else {
@@ -134,7 +133,7 @@ if (!$super_correct){
     $errors = TRUE;
 }
 else {
-	setcookie('super_value', $_POST['field-name-4'], time() + 30 * 24 * 60 * 60);
+	setcookie('super_value', json_encode($_POST['field-name-4']), time() + 30 * 24 * 60 * 60);
 }
 
 if(empty($_POST['bio-field']) || !preg_match($bioregex,$_POST['bio-field'])){
