@@ -51,9 +51,9 @@
 			<br/>
 			<select name="field-name-4[]" <?php if($errors['super']) print('class="error"');?>
 			  multiple="multiple">
-			  <option value="immortality" <?php if(array_search('immortality',array($values['super']))!==false) print('selected');?>>Immortality</option>
-			  <option value="walkthroughwalls" <?php if(array_search('walkthroughwalls',array($values['super']))!==false) print('selected');?>>Walk through walls</option>
-			  <option value="levitation" <?php if(array_search('levitation',array($values['super']))!==false) print('selected');?>>levitation</option>
+			  <option value="immortality" <?php if(array_search('immortality',array($values['super']))!==false) print('selected="selected"');?>>Immortality</option>
+			  <option value="walkthroughwalls" <?php if(array_search('walkthroughwalls',array($values['super']))!==false) print('selected="selected"');?>>Walk through walls</option>
+			  <option value="levitation" <?php if(array_search('levitation',array($values['super']))!==false) print('selected="selected"');?>>levitation</option>
 			</select>
 			<?php if($errors['super']) print($messages['bad_super']) ?>
 		  </label><br />
